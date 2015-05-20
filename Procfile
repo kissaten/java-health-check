@@ -1,1 +1,1 @@
-web: with_jmap java $JAVA_OPTS -cp target/classes:target/dependency/* Main
+web: with_jmap sh start.sh
