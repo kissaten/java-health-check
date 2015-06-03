@@ -1,1 +1,1 @@
-web: with_jmap sh start.sh
+web: with_jstack sh start.sh
