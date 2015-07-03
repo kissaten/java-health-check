@@ -7,6 +7,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.*;
 
+import com.heroku.sdk.jdbc.DatabaseUrl;
+
 public class Main extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -27,7 +29,7 @@ public class Main extends HttpServlet {
   private void showDatabase(HttpServletRequest req, HttpServletResponse resp)
       throws ServletException, IOException {
     try {
-      Connection connection = getConnection();
+      Connection connection = DatabaseUrl.extract().getConnection();
 
       Statement stmt = connection.createStatement();
       stmt.executeUpdate("CREATE TABLE IF NOT EXISTS ticks (tick timestamp)");
@@ -43,16 +45,6 @@ public class Main extends HttpServlet {
     } catch (Exception e) {
       resp.getWriter().print("There was an error: " + e.getMessage());
     }
-  }
-
-  private Connection getConnection() throws URISyntaxException, SQLException {
-    URI dbUri = new URI(System.getenv("DATABASE_URL"));
-
-    String username = dbUri.getUserInfo().split(":")[0];
-    String password = dbUri.getUserInfo().split(":")[1];
-    String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + dbUri.getPath();
-
-    return DriverManager.getConnection(dbUrl, username, password);
   }
 
   public static void main(String[] args) throws Exception{
