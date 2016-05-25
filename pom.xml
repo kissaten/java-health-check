@@ -31,6 +31,7 @@
       <groupId>com.heroku.agent</groupId>
       <artifactId>heroku-javaagent</artifactId>
       <version>1.5</version>
+      <scope>runtime</scope>
     </dependency>
   </dependencies>
   <build>
@@ -54,21 +55,6 @@
             <goals>
               <goal>copy-dependencies</goal>
             </goals>
-          </execution>
-          <execution>
-            <id>copy-heroku-javaagent</id>
-            <phase>package</phase>
-            <goals><goal>copy</goal></goals>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>com.heroku.agent</groupId>
-                  <artifactId>heroku-javaagent</artifactId>
-                  <version>1.5</version>
-                  <destFileName>heroku-javaagent.jar</destFileName>
-                </artifactItem>
-              </artifactItems>
-            </configuration>
           </execution>
         </executions>
       </plugin>
