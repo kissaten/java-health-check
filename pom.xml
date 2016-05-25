@@ -27,6 +27,11 @@
       <artifactId>postgresql</artifactId>
       <version>9.4-1201-jdbc41</version>
     </dependency>
+    <dependency>
+      <groupId>com.heroku.agent</groupId>
+      <artifactId>heroku-javaagent</artifactId>
+      <version>1.5</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -37,7 +42,7 @@
           <source>1.7</source>
           <target>1.7</target>
         </configuration>
-  	  </plugin>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
@@ -49,6 +54,21 @@
             <goals>
               <goal>copy-dependencies</goal>
             </goals>
+          </execution>
+          <execution>
+            <id>copy-heroku-javaagent</id>
+            <phase>package</phase>
+            <goals><goal>copy</goal></goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>com.heroku.agent</groupId>
+                  <artifactId>heroku-javaagent</artifactId>
+                  <version>1.5</version>
+                  <destFileName>heroku-javaagent.jar</destFileName>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
           </execution>
         </executions>
       </plugin>
