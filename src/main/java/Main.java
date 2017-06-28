@@ -1,3 +1,10 @@
+import org.apache.http.HttpEntity;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -47,7 +54,50 @@ public class Main extends HttpServlet {
   }
 
   public static void main(String[] args) throws Exception{
-    Server server = new Server(Integer.valueOf(System.getenv("PORT")));
+    final Integer port = Integer.valueOf(System.getenv("PORT"));
+
+    Runnable r = new Runnable() {
+      public void run() {
+        try {
+          Thread.sleep(60000);
+          CloseableHttpClient httpclient = HttpClients.createDefault();
+          while (true) {
+            HttpGet httpget = new HttpGet("http://localhost:" + port + "/health");
+            CloseableHttpResponse response = httpclient.execute(httpget);
+            try {
+              HttpEntity entity = response.getEntity();
+              if (entity != null) {
+                long len = entity.getContentLength();
+                if (len != -1 && len < 2048) {
+                  String reportedStatus = EntityUtils.toString(entity);
+                  if (!"up".equals(reportedStatus)) {
+                    System.out.println("at=health-check status=down action=exiting");
+                    System.exit(1);
+                  } else {
+                    System.out.println("at=health-check status=" + reportedStatus);
+                  }
+                } else {
+                  System.out.println("at=health-check status=unknown");
+                }
+              }
+              Thread.sleep(10000);
+            } finally {
+              response.close();
+            }
+          }
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        } catch (ClientProtocolException e) {
+          e.printStackTrace();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+    };
+
+    new Thread(r).start();
+
+    Server server = new Server(port);
     ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
     context.setContextPath("/");
     server.setHandler(context);
