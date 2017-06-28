@@ -59,6 +59,7 @@ public class Main extends HttpServlet {
     Runnable r = new Runnable() {
       public void run() {
         try {
+          Thread.currentThread().setName("health-check");
           Thread.sleep(60000);
           CloseableHttpClient httpclient = HttpClients.createDefault();
           while (true) {
