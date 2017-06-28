@@ -17,33 +17,9 @@
       <artifactId>javax.servlet-api</artifactId>
       <version>3.1.0</version>
     </dependency>
-    <dependency>
-      <groupId>com.heroku.sdk</groupId>
-      <artifactId>heroku-jdbc</artifactId>
-      <version>0.1.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.postgresql</groupId>
-      <artifactId>postgresql</artifactId>
-      <version>9.4-1201-jdbc41</version>
-    </dependency>
-    <dependency>
-      <groupId>com.heroku.agent</groupId>
-      <artifactId>heroku-javaagent</artifactId>
-      <version>1.5</version>
-      <scope>runtime</scope>
-    </dependency>
   </dependencies>
   <build>
     <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.3.2</version>
-        <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
-        </configuration>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
