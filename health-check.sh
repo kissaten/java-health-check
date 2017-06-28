@@ -10,7 +10,7 @@ while true; do
 
   if [ "$status" != "up" ]; then
     echo "at=health-check status=down"
-    kill -9 $(jps | grep -v "Jps" | tail -n1 | grep -o '^\\S*')
+    kill -9 $(jps | grep -v "Jps" | tail -n1 | grep -o '^\S*')
   else
     echo "at=health-check status=up"
     sleep 10
